@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="alertsIdentifier" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14D131" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Alerts" representedClassName="Alerts" syncable="YES">
+        <attribute name="alertName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="alertType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isEnabled" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="threshold" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DataDevice" representedClassName="DataDevice" syncable="YES">
+        <attribute name="addressIP" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hostName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recievedData" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sentData" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DataOverview" representedClassName="DataOverview" syncable="YES">
+        <attribute name="bandwidthClass" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recievedData" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sentData" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="LoginCredentials" representedClassName="LoginCredentials" syncable="YES">
+        <attribute name="isLoggedIn" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Alerts" positionX="-54" positionY="9" width="128" height="120"/>
+        <element name="DataDevice" positionX="-45" positionY="36" width="128" height="105"/>
+        <element name="DataOverview" positionX="-54" positionY="27" width="128" height="88"/>
+        <element name="LoginCredentials" positionX="-63" positionY="-18" width="128" height="90"/>
+    </elements>
+</model>
