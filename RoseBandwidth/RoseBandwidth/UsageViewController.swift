@@ -36,7 +36,7 @@ class UsageViewController: UIViewController {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         managedObjectContext = appDelegate.managedObjectContext
         fetchOverview()
-        var username = (credentials[0].username).capitalizedString
+        let username = (credentials[0].username).capitalizedString
         titleBarItem.title = "\(username)'s Usage"
         if ((UIApplication.sharedApplication().keyWindow?.rootViewController! as! LoginViewController).justLoggedIn == false) {
             refreshPressed(refreshPressed)
@@ -71,7 +71,7 @@ class UsageViewController: UIViewController {
     
     func updateView() {
         fetchOverview()
-        var bandwidth : String = overview[0].bandwidthClass
+        let bandwidth : String = overview[0].bandwidthClass
         bandwidthClass.text = bandwidth
         if bandwidth == "1024k" {
             classStatus.image = UIImage(named: "yellowlight.png")
@@ -86,7 +86,7 @@ class UsageViewController: UIViewController {
         var received : String = overview[0].recievedData
         receivedLabel.text = received
         received = received.substringToIndex(received.endIndex.predecessor().predecessor().predecessor())
-        var recNoComma = NSString(string: received).stringByReplacingOccurrencesOfString(",", withString: "")
+        let recNoComma = NSString(string: received).stringByReplacingOccurrencesOfString(",", withString: "")
         var rec : Float = NSString(string: recNoComma).floatValue
         rec = rec / 8000
         
@@ -96,7 +96,7 @@ class UsageViewController: UIViewController {
         }
         
         var recCon : NSLayoutConstraint
-        var mult = CGFloat(prog)
+        let mult = CGFloat(prog)
         
         recCon = NSLayoutConstraint(item: recProg, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: recBar, attribute: NSLayoutAttribute.Width, multiplier: mult, constant: 0.0)
         recCon.active = true
@@ -106,12 +106,12 @@ class UsageViewController: UIViewController {
         var sent : String = overview[0].sentData
         sentLabel.text = sent
         sent = sent.substringToIndex(sent.endIndex.predecessor().predecessor().predecessor())
-        var senNoComma = NSString(string: sent).stringByReplacingOccurrencesOfString(",", withString: "")
+        let senNoComma = NSString(string: sent).stringByReplacingOccurrencesOfString(",", withString: "")
         var sen : Float = NSString(string: senNoComma).floatValue
         sen = sen / 8000
         
         var senCon : NSLayoutConstraint
-        var mult2 = CGFloat(sen)
+        let mult2 = CGFloat(sen)
         
         senCon = NSLayoutConstraint(item: senProg, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: senBar, attribute: NSLayoutAttribute.Width, multiplier: mult2, constant: 0.0)
         
@@ -126,10 +126,13 @@ class UsageViewController: UIViewController {
         let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
         
         var error : NSError? = nil
-        credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
-        
+        do {
+            try credentials = managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
         
@@ -138,9 +141,13 @@ class UsageViewController: UIViewController {
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }
@@ -190,16 +197,24 @@ class UsageViewController: UIViewController {
         let fetchRequest = NSFetchRequest(entityName: usageIdentifier)
         
         var error : NSError? = nil
-        overview = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [DataOverview]
+        do {
+            try overview = managedObjectContext?.executeFetchRequest(fetchRequest) as! [DataOverview]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
         
         let credRequest = NSFetchRequest(entityName: credentialIdentifier)
-        credentials = managedObjectContext?.executeFetchRequest(credRequest, error: &error) as! [LoginCredentials]
+        do {
+            try credentials = managedObjectContext?.executeFetchRequest(credRequest) as! [LoginCredentials]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }

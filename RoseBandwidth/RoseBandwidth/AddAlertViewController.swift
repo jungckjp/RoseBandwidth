@@ -35,7 +35,7 @@ class AddAlertViewController: UIViewController {
                 newAlert!.threshold = (newAlert!.alertName as NSString).floatValue
                 
             }
-            println("Saved: \(newAlert!.threshold)")
+            print("Saved: \(newAlert!.threshold)")
             
             self.dismissViewControllerAnimated(true, completion: nil)
         }
@@ -83,16 +83,16 @@ class AddAlertViewController: UIViewController {
             newAlert?.isEnabled = true
         }
         
-        var loginCredentialsIdentifier = "LoginCredentials"
+        let loginCredentialsIdentifier = "LoginCredentials"
         let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
         
-        var error : NSError? = nil
-        var credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
+//        let error : NSError? = nil
+        var credentials = try! managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
         
-        if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
-            abort()
-        }
+//        if error != nil {
+//            print("There was an unresolved error: \(error?.userInfo)")
+//            abort()
+//        }
         
         if (credentials.count > 0){
             newAlert?.username = credentials[0].username
@@ -115,8 +115,8 @@ class AddAlertViewController: UIViewController {
         valueLabel.text = "\(newAlert!.alertName)"
 
         descLabel.text = "Your data has exceeded your \(newAlert!.alertName)\(newAlert!.alertType) limit"
-        var typeCell = (containedView.subviews[0] as! UITableView).cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))!
-        var valueCell = (containedView.subviews[0] as! UITableView).cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0))!
+        let typeCell = (containedView.subviews[0] as! UITableView).cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))!
+        let valueCell = (containedView.subviews[0] as! UITableView).cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0))!
         
         
         if (newAlert!.alertType == "%") {
@@ -142,10 +142,13 @@ class AddAlertViewController: UIViewController {
         let fetchRequest = NSFetchRequest(entityName: alertsIdentifier)
         
         var error : NSError? = nil
-        alerts = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [Alerts]
-        
+        do {
+            try alerts = managedObjectContext?.executeFetchRequest(fetchRequest) as! [Alerts]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
         
@@ -154,9 +157,13 @@ class AddAlertViewController: UIViewController {
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }

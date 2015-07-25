@@ -18,8 +18,8 @@ class AlertsTableViewController: UITableViewController {
 
 
     @IBAction func cellSwitched(sender: UISwitch) {
-        var cell  = (sender.superview?.superview?.superview?.superview as! AlertTableViewCell)
-        var path = self.tableView.indexPathForCell(cell)
+        let cell  = (sender.superview?.superview?.superview?.superview as! AlertTableViewCell)
+        let path = self.tableView.indexPathForCell(cell)
         alerts[path!.row].isEnabled = sender.on
         updateOn(sender, cell: cell)
     }
@@ -66,26 +66,29 @@ class AlertsTableViewController: UITableViewController {
     
     func updateAlerts() {
         
-        var loginCredentialsIdentifier = "LoginCredentials"
+        let loginCredentialsIdentifier = "LoginCredentials"
         let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
         
-        var error : NSError? = nil
-        var credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
+//        let error : NSError? = nil
+        var credentials = try! managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
         
-        if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
-            abort()
-        }
+//        if error != nil {
+//            print("There was an unresolved error: \(error?.userInfo)")
+//            abort()
+//        }
         
         if (credentials.count > 0){
         
             let fetchRequest = NSFetchRequest(entityName: alertsIdentifier)
         
             var error : NSError? = nil
-            alerts = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [Alerts]
-        
+            do {
+                try alerts = managedObjectContext?.executeFetchRequest(fetchRequest) as! [Alerts]
+            } catch let error1 as NSError {
+                error = error1
+            }
             if error != nil {
-                println("There was an unresolved error: \(error?.userInfo)")
+                print("There was an unresolved error: \(error?.userInfo)")
                 abort()
             }
         
@@ -100,7 +103,7 @@ class AlertsTableViewController: UITableViewController {
                 }
             }
             
-            alerts.sort({
+            alerts.sortInPlace({
                 $0.threshold.floatValue > $1.threshold.floatValue
             })
         }
@@ -109,9 +112,13 @@ class AlertsTableViewController: UITableViewController {
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }
@@ -143,7 +150,7 @@ class AlertsTableViewController: UITableViewController {
         }
         cell.titleLabel.text = "\(alerts[indexPath.row].alertName)\(alerts[indexPath.row].alertType)";
         cell.descLabel.text = "Your data has exceeded your \(alerts[indexPath.row].alertName)\(alerts[indexPath.row].alertType) limit";
-        var truth = alerts[indexPath.row].isEnabled as Bool;
+        let truth = alerts[indexPath.row].isEnabled as Bool;
         cell.onSwitch.setOn(truth, animated: false)
         updateOn(cell.onSwitch, cell: cell)
         return cell
@@ -174,7 +181,7 @@ class AlertsTableViewController: UITableViewController {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
         if segue.identifier == showDetailSegueIdentifier {
-            if let selectedIndexPath = tableView.indexPathForSelectedRow(){
+            if let selectedIndexPath = tableView.indexPathForSelectedRow{
                 let alert = alerts[selectedIndexPath.row]
                 (segue.destinationViewController as! AddAlertViewController).viewTitle = "Edit Alert"
                 (segue.destinationViewController as! AddAlertViewController).alert = alert

@@ -33,7 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         category.identifier = "alert"
         category.setActions([acceptAction], forContext: UIUserNotificationActionContext.Default)
         let categories = NSSet(array: [category])
-        let settings = UIUserNotificationSettings(forTypes: notificationType, categories: categories as Set<NSObject>)
+        //let settings = UIUserNotificationSettings(forTypes: notificationType, categories: categories as Set<NSObject>)
+        let settings = UIUserNotificationSettings(forTypes: notificationType, categories: categories as? Set<UIUserNotificationCategory>)
         application.registerUserNotificationSettings(settings)
         
         application.setMinimumBackgroundFetchInterval(NSTimeInterval.abs(600))
@@ -49,14 +50,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         let controller = self.window!.rootViewController as! LoginViewController
-        var loginCredentialsIdentifier = "LoginCredentials"
+        let loginCredentialsIdentifier = "LoginCredentials"
         let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
         
-        var error : NSError? = nil
-        var credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
+        var credentials : [LoginCredentials] = [LoginCredentials]()
         
+        var error : NSError? = nil
+        do {
+            try credentials =
+                managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
         if (credentials.count == 0) {
@@ -68,23 +75,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DataGrabber(login: credentials[0]);
         
         delay(10) {
-            var alertsIdentifier = "Alerts"
-            var overviewIdentifier = "DataOverview"
+            let alertsIdentifier = "Alerts"
+            let overviewIdentifier = "DataOverview"
             let fetchRequest2 = NSFetchRequest(entityName: overviewIdentifier)
-            var overview = self.managedObjectContext?.executeFetchRequest(fetchRequest2, error: &error) as! [DataOverview]
+            var overview = try! self.managedObjectContext?.executeFetchRequest(fetchRequest2) as! [DataOverview]
             let fetchRequest3 = NSFetchRequest(entityName: alertsIdentifier)
-            var alerts = self.managedObjectContext?.executeFetchRequest(fetchRequest3, error: &error) as! [Alerts]
-            
+            let alerts = try! self.managedObjectContext?.executeFetchRequest(fetchRequest3) as! [Alerts]
+            if (overview.count == 0) {
+                return
+            }
             var received : String = overview[0].recievedData
             received = received.substringToIndex(received.endIndex.predecessor().predecessor().predecessor())
-            var recNoComma = NSString(string: received).stringByReplacingOccurrencesOfString(",", withString: "")
-            var rec : Float = NSString(string: recNoComma).floatValue
+            
+            
+            let recNoComma = NSString(string: received).stringByReplacingOccurrencesOfString(",", withString: "")
+            let rec : Float = NSString(string: recNoComma).floatValue
             
             var currThreshold : Float = 0.0
             var currAlert : Alerts?
             for alert in alerts {
-                println(alert.threshold.floatValue)
-                println(rec)
+                print(alert.threshold.floatValue)
+                print(rec)
                 if ((alert.threshold.floatValue <= rec) && (alert.isEnabled.boolValue) && (alert.username == credentials[0].username)) {
                     if alert.threshold.floatValue > currThreshold {
                         currAlert = alert
@@ -93,14 +104,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             if (currAlert != nil) {
-                var localNotification:UILocalNotification = UILocalNotification()
+                let localNotification:UILocalNotification = UILocalNotification()
                 localNotification.alertBody = "Your data has exceeded your \(currAlert!.alertName)\(currAlert!.alertType) limit!"
                 localNotification.fireDate = NSDate(timeIntervalSinceNow: 1)
                 localNotification.category = "alert"
                 UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
             }
         }
-        
         
     }
     
@@ -142,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "Anthony-Minardo.RoseBandwidth" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
+        return urls[urls.count-1] 
     }()
 
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -158,18 +168,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("RoseBandwidth.sqlite")
         var error: NSError? = nil
         var failureReason = "There was an error creating or loading the application's saved data."
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
+        do {
+            try coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+        } catch var error1 as NSError {
+            error = error1
             coordinator = nil
             // Report any error we got.
             let dict = NSMutableDictionary()
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
             dict[NSLocalizedFailureReasonErrorKey] = failureReason
             dict[NSUnderlyingErrorKey] = error
-            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict as [NSObject : AnyObject])
+            //error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict as [NSObject : AnyObject])
             // Replace this with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(error), \(error!.userInfo)")
             abort()
+        } catch {
+            fatalError()
         }
         
         return coordinator
@@ -191,11 +206,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func saveContext () {
         if let moc = self.managedObjectContext {
             var error: NSError? = nil
-            if moc.hasChanges && !moc.save(&error) {
-                // Replace this implementation with code to handle the error appropriately.
-                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                NSLog("Unresolved error \(error), \(error!.userInfo)")
-                abort()
+            if moc.hasChanges {
+                do {
+                    try moc.save()
+                } catch let error1 as NSError {
+                    error = error1
+                    // Replace this implementation with code to handle the error appropriately.
+                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                    abort()
+                }
             }
         }
     }

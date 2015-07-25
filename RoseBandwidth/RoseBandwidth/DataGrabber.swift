@@ -57,8 +57,8 @@ class DataGrabber: NSObject {
         
         NSURLCache.sharedURLCache().removeAllCachedResponses()
         
-        var storage : NSHTTPCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in storage.cookies  as! [NSHTTPCookie]{
+        let storage : NSHTTPCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+        for cookie in storage.cookies  as [NSHTTPCookie]!{
             storage.deleteCookie(cookie)
         }
         
@@ -102,7 +102,7 @@ class DataGrabber: NSObject {
         } else {
             couldNotConnect()
         }
-        println("Failed with error:\(error.localizedDescription)")
+        print("Failed with error:\(error.localizedDescription)")
 
     }
     
@@ -117,7 +117,7 @@ class DataGrabber: NSObject {
     
     func connection(connection: NSURLConnection, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge!){
         if login != nil {
-            var authentication: NSURLCredential = NSURLCredential(user: login!.username, password: login!.password, persistence: NSURLCredentialPersistence.None)
+            let authentication: NSURLCredential = NSURLCredential(user: login!.username, password: login!.password, persistence: NSURLCredentialPersistence.None)
             
             // If the website allows for user session cookies, use this instead to allow multiple logins in one session.
             //var authentication: NSURLCredential = NSURLCredential(user: login!.username, password: login!.password, persistence: NSURLCredentialPersistence.None)
@@ -127,7 +127,7 @@ class DataGrabber: NSObject {
                     loginViewController!.loginFailed()
                 }
             }
-            challenge.sender.useCredential(authentication, forAuthenticationChallenge: challenge)
+            challenge.sender!.useCredential(authentication, forAuthenticationChallenge: challenge)
         }
     }
     
@@ -156,13 +156,13 @@ class DataGrabber: NSObject {
         let myHTMLString = NSString(data: self.data, encoding: NSUTF8StringEncoding)
         
         var err : NSError?
-        var parser     = HTMLParser(html: myHTMLString as String!, error: &err)
+        let parser     = HTMLParser(html: myHTMLString as String!, error: &err)
         if err != nil {
-            println(err)
+            print(err)
             exit(1)
         } else {
-            var items = parser.body?.findChildTags("td")
-            var i = 0
+            let items = parser.body?.findChildTags("td")
+//            var i = 0
 //            for item in items! {
 //                println("\(i): \(item.contents)")
 //                i++
@@ -183,19 +183,19 @@ class DataGrabber: NSObject {
                 }
                 
                 //Set overview data
-                var newOverview = NSEntityDescription.insertNewObjectForEntityForName(dataOverviewIdentifier, inManagedObjectContext: self.managedObjectContext!) as! DataOverview
+                let newOverview = NSEntityDescription.insertNewObjectForEntityForName(dataOverviewIdentifier, inManagedObjectContext: self.managedObjectContext!) as! DataOverview
                 newOverview.bandwidthClass = array[16].contents
                 newOverview.recievedData = array[17].contents
                 newOverview.sentData = array[18].contents
                 overviews.append(newOverview)
                 
-                var numDevices = (array.count - 28)/7
+                let numDevices = (array.count - 28)/7
                 
                 for i in 0..<numDevices {
                     var device = [NSString]()
                     
                     //Set devices data
-                    var newDevice = NSEntityDescription.insertNewObjectForEntityForName(dataDeviceIdentifier, inManagedObjectContext: self.managedObjectContext!) as! DataDevice
+                    let newDevice = NSEntityDescription.insertNewObjectForEntityForName(dataDeviceIdentifier, inManagedObjectContext: self.managedObjectContext!) as! DataDevice
                     newDevice.addressIP = array[28+7*i].contents
                     newDevice.hostName = array[30+7*i].contents
                     newDevice.recievedData = array[31+7*i].contents
@@ -223,11 +223,14 @@ class DataGrabber: NSObject {
         let fetchRequestOverview = NSFetchRequest(entityName: dataOverviewIdentifier)
         
         var error : NSError? = nil
-        devices = managedObjectContext?.executeFetchRequest(fetchRequestDevices, error: &error) as! [DataDevice]
-        overviews = managedObjectContext?.executeFetchRequest(fetchRequestOverview, error: &error) as! [DataOverview]
-        
+        do {
+            try devices = managedObjectContext?.executeFetchRequest(fetchRequestDevices) as! [DataDevice]
+            try overviews = managedObjectContext?.executeFetchRequest(fetchRequestOverview) as! [DataOverview]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
         
@@ -236,9 +239,13 @@ class DataGrabber: NSObject {
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }
@@ -246,17 +253,23 @@ class DataGrabber: NSObject {
 
     func grabData(){
         var error: NSError?
-        let myHTMLString = NSString(contentsOfURL: myURL!, encoding: NSUTF8StringEncoding, error: &error)
+        let myHTMLString: NSString?
+        do {
+            myHTMLString = try NSString(contentsOfURL: myURL!, encoding: NSUTF8StringEncoding)
+        } catch let error1 as NSError {
+            error = error1
+            myHTMLString = nil
+        }
         
         if let error = error {
-            println("Error : \(error)")
+            print("Error : \(error)")
         }
         
         
         var err : NSError?
-        var parser     = HTMLParser(html: myHTMLString! as String, error: &err)
+        var parser = HTMLParser(html: myHTMLString! as String, error: &err)
         if err != nil {
-            println(err)
+            print(err)
             exit(1)
         }
 

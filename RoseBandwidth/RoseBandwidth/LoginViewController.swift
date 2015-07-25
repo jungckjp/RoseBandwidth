@@ -51,7 +51,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
         self.loadingController.addAction(cancelAction)
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true)
         UIView.animateWithDuration(0.5, animations: {
             self.c?.constant = -45
@@ -72,6 +72,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
 
     
     override func viewWillAppear(animated: Bool) {
+        c?.active = false
         c = NSLayoutConstraint(item: loginViewArea, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: topView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: -45)
         c!.active = true
         
@@ -86,7 +87,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
         credentials.removeAll(keepCapacity: false);
         updateLoginCredentials()
         if (credentials.count > 0) {
-            var isLogged = credentials[0].isLoggedIn
+            let isLogged = credentials[0].isLoggedIn
             if isLogged.boolValue {
                 loadNextPage()
             }
@@ -201,16 +202,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
         
         let fetchRequest2 = NSFetchRequest(entityName: devicesIdentifier)
         
-        var error2 : NSError? = nil
-        var devices = managedObjectContext?.executeFetchRequest(fetchRequest2, error: &error2) as! [DataDevice]
+        //var error2 : NSError? = nil
+        let devices = try! managedObjectContext?.executeFetchRequest(fetchRequest2) as! [DataDevice]
         for index2 in devices {
             managedObjectContext?.deleteObject(index2)
         }
         
         let fetchRequest3 = NSFetchRequest(entityName: overviewIdentifier)
         
-        var error3 : NSError? = nil
-        var overview = managedObjectContext?.executeFetchRequest(fetchRequest3, error: &error3) as! [DataOverview]
+        //var error3 : NSError? = nil
+        let overview = try! managedObjectContext?.executeFetchRequest(fetchRequest3) as! [DataOverview]
         
         for index3 in overview {
             managedObjectContext?.deleteObject(index3)
@@ -238,21 +239,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate{
         let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
         
         var error : NSError? = nil
-        credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
-        
+        do {
+            try credentials = managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
+
         
     }
     
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }

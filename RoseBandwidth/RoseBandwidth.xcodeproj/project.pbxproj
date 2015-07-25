@@ -22,6 +22,7 @@
 		AB1447E41A889EC0004A51DF /* example-parser in Resources */ = {isa = PBXBuildFile; fileRef = AB1447E31A889EC0004A51DF /* example-parser */; };
 		AB1DE6271A8949BB006DBC01 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1DE6261A8949BB006DBC01 /* libxml2.dylib */; };
 		AB29EB121A8954F600AF811E /* DataGrabber.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB29EB111A8954F600AF811E /* DataGrabber.swift */; };
+		AB2E86111B64187E00ED5290 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AB2E86101B64187E00ED5290 /* Default-568h@2x.png */; };
 		AB3898691AB758D80054DF1A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB3898681AB758D80054DF1A /* AssetsLibrary.framework */; };
 		AB38986B1AB758DD0054DF1A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB38986A1AB758DD0054DF1A /* CoreGraphics.framework */; };
 		AB38986D1AB758E20054DF1A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB38986C1AB758E20054DF1A /* CoreText.framework */; };
@@ -116,6 +117,7 @@
 		AB1447E31A889EC0004A51DF /* example-parser */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "example-parser"; sourceTree = "<group>"; };
 		AB1DE6261A8949BB006DBC01 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		AB29EB111A8954F600AF811E /* DataGrabber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataGrabber.swift; sourceTree = "<group>"; };
+		AB2E86101B64187E00ED5290 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		AB3898681AB758D80054DF1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		AB38986A1AB758DD0054DF1A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		AB38986C1AB758E20054DF1A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -376,6 +378,7 @@
 		FFFCD3B81A8469F7008A7F54 = {
 			isa = PBXGroup;
 			children = (
+				AB2E86101B64187E00ED5290 /* Default-568h@2x.png */,
 				FFFCD3C21A8469F7008A7F54 /* Products */,
 				FFFCD3C31A8469F7008A7F54 /* RoseBandwidth */,
 				FFFCD3DE1A8469F7008A7F54 /* RoseBandwidthTests */,
@@ -478,7 +481,9 @@
 		FFFCD3B91A8469F7008A7F54 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = edu.rosehulman;
 				TargetAttributes = {
 					FFFCD3C01A8469F7008A7F54 = {
@@ -558,6 +563,7 @@
 				FFFCD3FB1A846A5A008A7F54 /* settingshover.png in Resources */,
 				AB52D02B1AE08CA50055343F /* Icon-120.png in Resources */,
 				FFFCD3F71A846A5A008A7F54 /* greenlight.png in Resources */,
+				AB2E86111B64187E00ED5290 /* Default-568h@2x.png in Resources */,
 				FF3BC0581ADF2F31004F965D /* rosebandwidthicon.png in Resources */,
 				FFFCD3D31A8469F7008A7F54 /* Images.xcassets in Resources */,
 				AB52D0181AE08C5B0055343F /* Icon-40@3x.png in Resources */,
@@ -659,6 +665,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -673,7 +680,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -709,7 +716,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -731,6 +738,7 @@
 				);
 				INFOPLIST_FILE = RoseBandwidth/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Minardo-Jungck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RoseBandwidth;
 				PROVISIONING_PROFILE = "5c0c83ae-ca61-4163-97d9-ff8f14191b22";
 				SWIFT_OBJC_BRIDGING_HEADER = "RoseBandwidth/RoseBandwidth-Bridging-Header.h";
@@ -754,6 +762,7 @@
 				);
 				INFOPLIST_FILE = RoseBandwidth/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Minardo-Jungck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RoseBandwidth;
 				PROVISIONING_PROFILE = "5c0c83ae-ca61-4163-97d9-ff8f14191b22";
 				SWIFT_OBJC_BRIDGING_HEADER = "RoseBandwidth/RoseBandwidth-Bridging-Header.h";
@@ -775,6 +784,7 @@
 				);
 				INFOPLIST_FILE = RoseBandwidthTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Anthony-Minardo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RoseBandwidth.app/RoseBandwidth";
 			};
@@ -790,6 +800,7 @@
 				);
 				INFOPLIST_FILE = RoseBandwidthTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Anthony-Minardo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RoseBandwidth.app/RoseBandwidth";
 			};

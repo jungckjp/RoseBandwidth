@@ -21,10 +21,10 @@ class ValueTableView: UITableView {
     */
 
     func getSelected() -> NSString {
-        return valueField.text
+        return valueField.text!
     }
     
     func getValue() -> NSString {
-        return valueField.text
+        return valueField.text!
     }
 }

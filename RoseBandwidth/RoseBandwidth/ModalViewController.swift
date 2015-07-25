@@ -18,22 +18,22 @@ class ModalViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func savePressed(sender: AnyObject) {
-        println("Pressed")
+        print("Pressed")
         if tableSettingCell != nil {
-            println("Cell")
+            print("Cell")
             if alert != nil {
-                println("Alert")
+                print("Alert")
                 if typeView {
-                    println("Type")
-                    var typeTable = containedView.subviews[0] as! TypeTableView
-                    var string = typeTable.getSelected()
+                    print("Type")
+                    let typeTable = containedView.subviews[0] as! TypeTableView
+                    let string = typeTable.getSelected()
                     tableSettingCell?.detailTextLabel?.text = string as String
                     alert!.alertType = typeTable.getType() as String
                     savedManagedObjectContext()
                 } else if valueView {
-                    println("Value")
-                    var valueTable = containedView.subviews[0] as! ValueTableView
-                    var string = valueTable.getSelected()
+                    print("Value")
+                    let valueTable = containedView.subviews[0] as! ValueTableView
+                    let string = valueTable.getSelected()
                     tableSettingCell?.detailTextLabel?.text = string as String
                     alert!.alertName = valueTable.getValue() as String
                     savedManagedObjectContext()
@@ -65,9 +65,13 @@ class ModalViewController: UIViewController, UITextFieldDelegate {
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class ValueTextField: UITextField {
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.becomeFirstResponder()
     }

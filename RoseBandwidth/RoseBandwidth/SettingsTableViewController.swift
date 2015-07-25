@@ -34,12 +34,12 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
     override func viewDidAppear(animated: Bool) {
         let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
         
-        var error : NSError? = nil
-        var credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
+//        var error : NSError? = nil
+        var credentials = try! managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
         
-        var error2 : NSError? = nil
+//        var error2 : NSError? = nil
         let fetchRequest2 = NSFetchRequest(entityName: alertsIdentifier)
-        var alerts = managedObjectContext?.executeFetchRequest(fetchRequest2, error: &error) as! [Alerts]
+        var alerts = try! managedObjectContext?.executeFetchRequest(fetchRequest2) as! [Alerts]
         
         var count = 0
         if credentials.count > 0 {
@@ -54,7 +54,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
         
         self.tableView(self.tableView, cellForRowAtIndexPath: NSIndexPath(forRow: 2, inSection: 0)).detailTextLabel?.text = count != 1 ? "\(count) alerts" : "\(count) alert"
         
-        var user : NSString = credentials[0].username
+        let user : NSString = credentials[0].username
         self.tableView(self.tableView, cellForRowAtIndexPath: NSIndexPath(forRow: 4, inSection: 0)).textLabel?.text = "LOGGED IN AS \(user.uppercaseString)"
         
         
@@ -85,13 +85,13 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
             
             let fetchRequest = NSFetchRequest(entityName: loginCredentialsIdentifier)
             
-            var error : NSError? = nil
-            var credentials = managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [LoginCredentials]
+//            let error : NSError? = nil
+            let credentials = try! managedObjectContext?.executeFetchRequest(fetchRequest) as! [LoginCredentials]
             
-            if error != nil {
-                println("There was an unresolved error: \(error?.userInfo)")
-                abort()
-            }
+//            if error != nil {
+//                print("There was an unresolved error: \(error?.userInfo)")
+//                abort()
+//            }
             
             for index in credentials {
                 managedObjectContext?.deleteObject(index)
@@ -100,7 +100,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
             let fetchRequest2 = NSFetchRequest(entityName: devicesIdentifier)
             
             var error2 : NSError? = nil
-            var devices = managedObjectContext?.executeFetchRequest(fetchRequest2, error: &error) as! [DataDevice]
+            let devices = try! managedObjectContext?.executeFetchRequest(fetchRequest2) as! [DataDevice]
             
             for index2 in devices {
                 managedObjectContext?.deleteObject(index2)
@@ -109,7 +109,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
             let fetchRequest3 = NSFetchRequest(entityName: overviewIdentifier)
             
             var error3 : NSError? = nil
-            var overview = managedObjectContext?.executeFetchRequest(fetchRequest3, error: &error) as! [DataOverview]
+            let overview = try! managedObjectContext?.executeFetchRequest(fetchRequest3) as! [DataOverview]
             
             for index3 in overview {
                 managedObjectContext?.deleteObject(index3)
@@ -123,9 +123,9 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
         }
         
         if indexPath.section == 0 && indexPath.row == 10 {
-            var device = UIDevice.currentDevice().model
-            var version = UIDevice.currentDevice().systemName + ": " + UIDevice.currentDevice().systemVersion
-            var mailComposerVC = MFMailComposeViewController()
+            let device = UIDevice.currentDevice().model
+            let version = UIDevice.currentDevice().systemName + ": " + UIDevice.currentDevice().systemVersion
+            let mailComposerVC = MFMailComposeViewController()
             mailComposerVC.mailComposeDelegate = self
             mailComposerVC.setToRecipients(["jungckjp@rose-hulman.edu"])
             mailComposerVC.setSubject("[RoseBandwidth] Feedback")
@@ -139,7 +139,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
         }
     }
     
-    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     
@@ -207,9 +207,13 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
     func savedManagedObjectContext() {
         var error : NSError?
         
-        managedObjectContext?.save(&error)
+        do {
+            try managedObjectContext?.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
         if error != nil {
-            println("There was an unresolved error: \(error?.userInfo)")
+            print("There was an unresolved error: \(error?.userInfo)")
             abort()
         }
     }

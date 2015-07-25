@@ -22,10 +22,21 @@ class AlertsViewController: UIViewController {
         //self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: "showEditAlertsView"), animated: true)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "pushAddView"), animated: true)
         
+        let backButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: "dismiss")
+        self.navigationItem.leftBarButtonItem = backButton
+        
+    }
+    
+    @IBAction func dismiss(sender: UIBarButtonItem) {
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        print("Dismiss")
+    }
+    func dismiss() {
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func showEditAlertsView() {
-        var alertTableView = containedView.subviews[0] as! UITableView
+        let alertTableView = containedView.subviews[0] as! UITableView
         alertTableView.setEditing(true, animated: true)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "hideEditAlertsView"), animated: true)
         
@@ -36,7 +47,7 @@ class AlertsViewController: UIViewController {
     }
     
     func hideEditAlertsView() {
-        var alertTableView = containedView.subviews[0] as! UITableView
+        let alertTableView = containedView.subviews[0] as! UITableView
         alertTableView.setEditing(false, animated: true)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action: "showEditAlertsView"), animated: true)
     }
