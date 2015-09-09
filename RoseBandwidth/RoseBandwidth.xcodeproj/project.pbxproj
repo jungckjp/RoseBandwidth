@@ -737,10 +737,12 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = RoseBandwidth/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Minardo-Jungck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RoseBandwidth;
 				PROVISIONING_PROFILE = "5c0c83ae-ca61-4163-97d9-ff8f14191b22";
+				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "RoseBandwidth/RoseBandwidth-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -761,11 +763,14 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = RoseBandwidth/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Minardo-Jungck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RoseBandwidth;
 				PROVISIONING_PROFILE = "5c0c83ae-ca61-4163-97d9-ff8f14191b22";
+				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "RoseBandwidth/RoseBandwidth-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

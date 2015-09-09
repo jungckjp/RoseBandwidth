@@ -182,24 +182,22 @@ class DataGrabber: NSObject {
                     managedObjectContext?.deleteObject(devices[i])
                 }
                 
+                
                 //Set overview data
                 let newOverview = NSEntityDescription.insertNewObjectForEntityForName(dataOverviewIdentifier, inManagedObjectContext: self.managedObjectContext!) as! DataOverview
-                newOverview.bandwidthClass = array[16].contents
-                newOverview.recievedData = array[17].contents
-                newOverview.sentData = array[18].contents
+                newOverview.bandwidthClass = array[15].contents
+                newOverview.recievedData = array[16].contents
+                newOverview.sentData = array[17].contents
                 overviews.append(newOverview)
-                
-                let numDevices = (array.count - 28)/7
+                let numDevices = (array.count - 27)/7
                 
                 for i in 0..<numDevices {
-                    var device = [NSString]()
-                    
                     //Set devices data
                     let newDevice = NSEntityDescription.insertNewObjectForEntityForName(dataDeviceIdentifier, inManagedObjectContext: self.managedObjectContext!) as! DataDevice
-                    newDevice.addressIP = array[28+7*i].contents
-                    newDevice.hostName = array[30+7*i].contents
-                    newDevice.recievedData = array[31+7*i].contents
-                    newDevice.sentData = array[32+7*i].contents
+                    newDevice.addressIP = array[27+7*i].contents
+                    newDevice.hostName = array[29+7*i].contents
+                    newDevice.recievedData = array[30+7*i].contents
+                    newDevice.sentData = array[31+7*i].contents
                     devices.append(newDevice)
                 }
                 
