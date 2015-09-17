@@ -741,7 +741,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Minardo-Jungck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RoseBandwidth;
-				PROVISIONING_PROFILE = "5c0c83ae-ca61-4163-97d9-ff8f14191b22";
+				PROVISIONING_PROFILE = "b694d988-2521-4af9-b57f-2e9c40960027";
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "RoseBandwidth/RoseBandwidth-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -767,7 +767,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Minardo-Jungck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RoseBandwidth;
-				PROVISIONING_PROFILE = "5c0c83ae-ca61-4163-97d9-ff8f14191b22";
+				PROVISIONING_PROFILE = "b694d988-2521-4af9-b57f-2e9c40960027";
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "RoseBandwidth/RoseBandwidth-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

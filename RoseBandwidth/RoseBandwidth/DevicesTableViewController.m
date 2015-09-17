@@ -149,10 +149,10 @@
     
     NSString * thisReceived = [receivedNoComma substringToIndex: [receivedNoComma length] - 3];
     NSString * thisSent = [sentNoComma substringToIndex: [sentNoComma length] - 3];
-    NSString * thatReceived = [receivedTotalNoComma substringToIndex: [receivedTotalNoComma length] - 3];
-    NSString * thatSent = [sentTotalNoComma substringToIndex: [sentTotalNoComma length] - 3];
+    //NSString * thatReceived = [receivedTotalNoComma substringToIndex: [receivedTotalNoComma length] - 3];
+    //NSString * thatSent = [sentTotalNoComma substringToIndex: [sentTotalNoComma length] - 3];
     
-    float used = ((thisReceived.floatValue + thisSent.floatValue) / (thatReceived.floatValue + thatSent.floatValue))*100;
+    float used = ((thisReceived.floatValue + thisSent.floatValue) / (8000))*100;
     
     NSString * usedText = [NSString stringWithFormat:@"%.1f%%", used];
     
