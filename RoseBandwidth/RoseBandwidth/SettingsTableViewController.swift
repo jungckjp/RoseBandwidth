@@ -39,7 +39,7 @@ class SettingsTableViewController: UITableViewController, MFMailComposeViewContr
         
 //        var error2 : NSError? = nil
         let fetchRequest2 = NSFetchRequest(entityName: alertsIdentifier)
-        var alerts = try! managedObjectContext?.executeFetchRequest(fetchRequest2) as! [Alerts]
+        let alerts = try! managedObjectContext?.executeFetchRequest(fetchRequest2) as! [Alerts]
         
         var count = 0
         if credentials.count > 0 {

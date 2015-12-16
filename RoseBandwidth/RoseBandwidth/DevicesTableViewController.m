@@ -48,13 +48,13 @@
 - (void)fetchData{
     
     self.devicesIdentifier = @"DataDevice";
-    DevicesTableViewController *appDelegate = (DevicesTableViewController *)[[UIApplication sharedApplication] delegate];
+    DevicesTableViewController *appDelegate = (DevicesTableViewController *)[UIApplication sharedApplication].delegate;
     
     self.managedObjectContext = appDelegate.managedObjectContext;
     NSEntityDescription * entityDescription = [NSEntityDescription entityForName:self.devicesIdentifier inManagedObjectContext:self.managedObjectContext];
     
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
+    request.entity = entityDescription;
     
     NSError * error;
     self.devices = [self.managedObjectContext executeFetchRequest:request error:&error];
@@ -67,16 +67,16 @@
         NSString *d1sNoComma = [device1.sentData
                                  stringByReplacingOccurrencesOfString:@"," withString:@""];
         
-        NSString *d1Received = [d1rNoComma substringToIndex: [d1rNoComma length] - 3];
-        NSString *d1Sent = [d1sNoComma substringToIndex: [d1sNoComma length] - 3];
+        NSString *d1Received = [d1rNoComma substringToIndex: d1rNoComma.length - 3];
+        NSString *d1Sent = [d1sNoComma substringToIndex: d1sNoComma.length - 3];
         
         NSString *d2rNoComma = [device2.recievedData
                                 stringByReplacingOccurrencesOfString:@"," withString:@""];
         NSString *d2sNoComma = [device2.sentData
                                 stringByReplacingOccurrencesOfString:@"," withString:@""];
         
-        NSString *d2Received = [d2rNoComma substringToIndex: [d2rNoComma length] - 3];
-        NSString *d2Sent = [d2sNoComma substringToIndex: [d2sNoComma length] - 3];
+        NSString *d2Received = [d2rNoComma substringToIndex: d2rNoComma.length - 3];
+        NSString *d2Sent = [d2sNoComma substringToIndex: d2sNoComma.length - 3];
         
         float d1Total = d1Received.floatValue + d1Sent.floatValue;
         float d2Total = d2Received.floatValue + d2Sent.floatValue;
@@ -99,7 +99,7 @@
     NSEntityDescription * entityDescription2 = [NSEntityDescription entityForName:self.dataIdentifier inManagedObjectContext:self.managedObjectContext];
     
     NSFetchRequest * request2 = [[NSFetchRequest alloc] init];
-    [request2 setEntity:entityDescription2];
+    request2.entity = entityDescription2;
     
     NSError * error2;
     self.dataOverview = [self.managedObjectContext executeFetchRequest:request2 error:&error2];
@@ -131,6 +131,7 @@
     DeviceTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: @"deviceTableCell"];
     DataDevice *curr = ((DataDevice *)self.devices[indexPath.row]);
     DataOverview * overview = ((DataOverview *)self.dataOverview[0]);
+    
     if ([curr.hostName isEqualToString:@"Created by Captive Portal service"]){
         cell.deviceLabel.text = @"Unnamed Device";
     } else {
@@ -147,8 +148,8 @@
     NSString *sentTotalNoComma = [overview.sentData
                              stringByReplacingOccurrencesOfString:@"," withString:@""];
     
-    NSString * thisReceived = [receivedNoComma substringToIndex: [receivedNoComma length] - 3];
-    NSString * thisSent = [sentNoComma substringToIndex: [sentNoComma length] - 3];
+    NSString * thisReceived = [receivedNoComma substringToIndex: receivedNoComma.length - 3];
+    NSString * thisSent = [sentNoComma substringToIndex: sentNoComma.length - 3];
     //NSString * thatReceived = [receivedTotalNoComma substringToIndex: [receivedTotalNoComma length] - 3];
     //NSString * thatSent = [sentTotalNoComma substringToIndex: [sentTotalNoComma length] - 3];
     
